@@ -1,25 +1,20 @@
-import logo from './logo.svg';
 import styles from './App.module.css';
+import { SayHello, ConnectMetamask } from './MyComponents';
 import Web3 from 'web3';
-console.log(Web3)
+import { createSignal } from "solid-js";
+
+
+
+
 
 function App() {
+
+  const [web3, setweb3] = createSignal(new Web3());
+
   return (
     <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
+      <SayHello></SayHello>
+      <ConnectMetamask setweb3={setweb3}></ConnectMetamask>
     </div>
   );
 }
