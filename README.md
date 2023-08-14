@@ -66,3 +66,9 @@ initial commit就是用solidjs官方模板刚配好环境引入web3后的commit
 ## web3js连接Metamask
 
 [这条](https://ethereum.stackexchange.com/questions/67145/how-to-connect-web3-with-metamask)Stackoverflow的回答和[这条](https://juejin.cn/post/7099125551784280101)掘金社区帖子是我采用的，其中前者还提到了一种新的连接方式。[这份](https://blog.valist.io/how-to-connect-web3-js-to-metamask-in-2020-fee2b2edf58a)帖子提到了`window.ethereum.request({method: 'eth_requestAccounts'})`，但是我不知道它和我采用的` window.ethereum.enable()`有什么区别
+
+onclick事件点击完默认会刷新页面，导致connect之后因为刷新又再次disconnect，所以要event.preventDefault();
+
+MetaMask: 'ethereum.enable()' is deprecated and may be removed in the future. Please use the 'eth_requestAccounts' RPC method instead.
+
+真是头大

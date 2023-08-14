@@ -7,25 +7,14 @@ export function SayHello() {
 }
 
 export function ConnectMetamask(props) {
-    const connect2Metamask = async () => {
-        // 检查是否是新的 MetaMask 或 DApp 浏览器
-        var web3Provider;
+    const connect2Metamask = async (event) => {
+        event.preventDefault();
         if (window.ethereum) {
-            web3Provider = window.ethereum;
-            try {
-                // 请求用户授权
-                await window.ethereum.enable();
-            } catch (error) {
-                // 用户不授权时
-                console.error("User denied account access")
-            }
-        } else if (window.web3) { // 老版 MetaMask Legacy dapp browsers...
-            web3Provider = window.web3.currentProvider;
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            props.setweb3(new Web3(window.ethereum));
         } else {
-            // web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
-            console.error("please install Metamask");
+            console.log("MetaMask version out-of-date or it wasn't installed.");
         }
-        props.setweb3(new Web3(web3Provider));
     }
 
     return (
@@ -36,3 +25,4 @@ export function ConnectMetamask(props) {
         </form>
     );
 }
+
