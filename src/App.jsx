@@ -1,11 +1,14 @@
 import styles from './App.module.css';
 import Web3 from 'web3';
-import { SayHello, RefetchButton, AccountInfoBlock, MachineInfoBlock, PurchaseDonuts } from './MyComponents';
+import { RefetchButton, AccountInfoBlock, MachineInfoBlock, PurchaseDonuts, AlertBlock } from './MyComponents';
 import { createSignal, createResource, Show } from "solid-js";
 import { abi, contractAddr } from './DountContractInfo';
 
 
 function App() {
+  // for alert
+  const [alertMsg, setAlertMsg] = createSignal(null);
+
   // init web3
   var web3 = null;
   if (window.ethereum) {
@@ -15,7 +18,7 @@ function App() {
     console.log("MetaMask version out-of-date or it wasn't installed.");
   }
 
-  var donutContract = null;
+  const [donutContract, setDonutContract] = createSignal(null);
   const [accountAddr, setAccountAddr] = createSignal(null);
 
   (async () => {
@@ -30,9 +33,10 @@ function App() {
         setAccountAddr(a[0]);
         console.log("Your account addr:", accountAddr());
       });
-      donutContract = new web3.eth.Contract(abi, contractAddr);
-      console.log("contract loaded:", donutContract);
+      setDonutContract(new web3.eth.Contract(abi, contractAddr));
+      console.log("contract loaded:", donutContract());
       console.log("all prepared.");
+      setAlertMsg("Everything prepared, press REFECH to load data.");
     } else {
       console.log("web3.eth.net.isListening error.");
     }
@@ -46,11 +50,11 @@ function App() {
   createResource(refetchFlag, async () => {
     await web3.eth.getBalance(accountAddr()).then((r) => {
       setAccountBalance(web3.utils.fromWei(r, 'ether'));
-    })
+    });
   })
   const [accountDonutBalance, setAccountDonutBalance] = createSignal(null);
-  createResource(refetchFlag, async ()=>{
-    await donutContract.methods.donutBalances(accountAddr()).call().then((r)=>{
+  createResource(refetchFlag, async () => {
+    await donutContract().methods.donutBalances(accountAddr()).call().then((r) => {
       setAccountDonutBalance(Number(r));
     });
   });
@@ -58,7 +62,7 @@ function App() {
   // refetch machine balance
   const [machineInfo, setMachineInfo] = createSignal(null);
   createResource(refetchFlag, async () => {
-    await donutContract.methods.getBalance().call().then((r) => {
+    await donutContract().methods.getBalance().call().then((r) => {
       r[0] = Number(r[0]);
       r[1] = web3.utils.fromWei(r[1], 'ether')
       setMachineInfo(r);
@@ -66,21 +70,22 @@ function App() {
   });
 
   // for test when click the button
-  createResource(refetchFlag,()=>{
-    // console.log(accountAddr());
+  createResource(refetchFlag, () => {
+
   });
 
   return (
     <div class={styles.App}>
-      <SayHello></SayHello>
+      <i><h1>Donut Vending Machine</h1></i>
+      <i>Decentrialized Application Version</i><br /><br />
       <Show
         when={web3}
       >
-        <div><i>wallet connected.</i></div>
-        <RefetchButton setReF={setReF} /><br />
+        <AlertBlock msg={alertMsg()} /><br />
+        <RefetchButton setReF={setReF} setAlert={setAlertMsg} /><br />
         <AccountInfoBlock addr={accountAddr()} balance={accountBalance()} donutBalance={accountDonutBalance()} /><br />
         <MachineInfoBlock info={machineInfo()} /><br />
-        <PurchaseDonuts addr={accountAddr()} />
+        <PurchaseDonuts contract={donutContract()} addr={accountAddr()} trans={web3.utils.toWei} setAlert={setAlertMsg} />
       </Show>
     </div>
   );

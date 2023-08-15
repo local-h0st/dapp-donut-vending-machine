@@ -2,12 +2,6 @@ import { Show, createSignal } from "solid-js";
 import Web3 from 'web3';
 console.log(Web3);
 
-export function SayHello() {
-    return (
-        <h1>Hello, this is a donut vending machine dapp.</h1>
-    );
-}
-
 export function RefetchButton(props) {
     return (
         <div>
@@ -16,11 +10,26 @@ export function RefetchButton(props) {
                     event.preventDefault();
                     props.setReF(true);
                     props.setReF(false);
+                    props.setAlert(null);
                 }}>
                     REFETCH
                 </button>
             </form>
         </div>
+    );
+}
+
+export function AlertBlock(props) {
+    return (
+        <Show
+        when={props.msg!=null}
+        >
+            <div>
+            <i><b>Alert: </b>{props.msg}</i><br />
+        </div>       
+        </Show>
+
+ 
     );
 }
 
@@ -60,38 +69,51 @@ export function PurchaseDonuts(props) {
     const [amount, setAmount] = createSignal(null);
     const [value, setValue] = createSignal(null);
 
-    function purchase(event) {
+    async function purchase(event) {
         event.preventDefault();
-        console.log(amount(), value());
+        props.setAlert("Transcation pending ..")
+        await props.contract.methods.purchase(amount()).send({ from: props.addr, value: props.trans(value(), 'ether') })
+            .then((receipt) => {
+                console.log(receipt);
+                props.setAlert("Success :) Transcation hash: " + receipt.transactionHash)
+            })
+            .catch((error)=>{
+                console.log(error);
+                props.setAlert("Transcation failed :(");
+            });
     }
 
     return (
         <Show
-        when={props.addr!=null}
+            when={props.contract != null && props.addr != null}
         >
-<form>
             <div>
-                <label for="amount">Amount of donuts you wanna purchase:</label><br />
-                <input
-                    id="amount"
-                    onInput={(e) => {
-                        setAmount(e.currentTarget.value);
-                    }}
-                />
-                <br />
-                <label for="value">Value you be glad to pay:</label><br />
-                <input
-                    id="value"
-                    onInput={(e) => {
-                        setValue(e.currentTarget.value);
-                    }}
-                />
+                <i>---------------- Purchase Donut Section ----------------</i><br />
+
+                <form>
+                    <div>
+                        <i><label for="amount">Amount:</label><br /></i>
+                        <input
+                            id="amount"
+                            onInput={(e) => {
+                                setAmount(e.currentTarget.value);
+                            }}
+                        />
+                        <br />
+                        <i><label for="value">Value(ether):</label><br /></i>
+                        <input
+                            id="value"
+                            onInput={(e) => {
+                                setValue(e.currentTarget.value);
+                            }}
+                        />
+                    </div>
+                    <button type="submit" onClick={purchase}>
+                        purchase the donuts !!
+                    </button>
+                </form>
             </div>
-            <button type="submit" onClick={purchase}>
-                purchase the donuts !!
-            </button>
-        </form>
         </Show>
-        
+
     );
 }
