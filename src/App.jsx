@@ -1,6 +1,6 @@
 import styles from './App.module.css';
 import Web3 from 'web3';
-import { SayHello, RefetchButton, AccountInfoBlock, MachineInfoBlock } from './MyComponents';
+import { SayHello, RefetchButton, AccountInfoBlock, MachineInfoBlock, PurchaseDonuts } from './MyComponents';
 import { createSignal, createResource, Show } from "solid-js";
 import { abi, contractAddr } from './DountContractInfo';
 
@@ -80,6 +80,7 @@ function App() {
         <RefetchButton setReF={setReF} /><br />
         <AccountInfoBlock addr={accountAddr()} balance={accountBalance()} donutBalance={accountDonutBalance()} /><br />
         <MachineInfoBlock info={machineInfo()} /><br />
+        <PurchaseDonuts addr={accountAddr()} />
       </Show>
     </div>
   );

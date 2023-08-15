@@ -1,3 +1,4 @@
+import { Show, createSignal } from "solid-js";
 import Web3 from 'web3';
 console.log(Web3);
 
@@ -52,4 +53,45 @@ export function MachineInfoBlock(props) {
             </div>
         </Show>
     )
+}
+
+export function PurchaseDonuts(props) {
+
+    const [amount, setAmount] = createSignal(null);
+    const [value, setValue] = createSignal(null);
+
+    function purchase(event) {
+        event.preventDefault();
+        console.log(amount(), value());
+    }
+
+    return (
+        <Show
+        when={props.addr!=null}
+        >
+<form>
+            <div>
+                <label for="amount">Amount of donuts you wanna purchase:</label><br />
+                <input
+                    id="amount"
+                    onInput={(e) => {
+                        setAmount(e.currentTarget.value);
+                    }}
+                />
+                <br />
+                <label for="value">Value you be glad to pay:</label><br />
+                <input
+                    id="value"
+                    onInput={(e) => {
+                        setValue(e.currentTarget.value);
+                    }}
+                />
+            </div>
+            <button type="submit" onClick={purchase}>
+                purchase the donuts !!
+            </button>
+        </form>
+        </Show>
+        
+    );
 }
