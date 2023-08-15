@@ -72,3 +72,19 @@ onclick事件点击完默认会刷新页面，导致connect之后因为刷新又
 MetaMask: 'ethereum.enable()' is deprecated and may be removed in the future. Please use the 'eth_requestAccounts' RPC method instead.
 
 真是头大
+
+又看了一个早上，突然一搜Promise能不能返回值，终于在互联网角落找到了，原来Promise不能返回值，只能通过全局变量的方式传递出去。
+
+async函数返回一个Promise对象。
+async函数内部return语句返回的值，会成为then方法回调函数的参数。
+
+async function f(){
+return 'hello world';
+}
+f().then(v=>console.log(v))
+// "hello world;"
+
+createResource好像必须要fetch函数？
+直接不用了
+
+出现 Unrecognized value. Skipped inserting 大概就是合约返回json中数据类型js不能使用，比如bigint，数量转为number，eth转为string

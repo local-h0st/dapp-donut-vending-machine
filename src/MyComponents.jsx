@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+console.log(Web3);
 
 export function SayHello() {
     return (
@@ -6,23 +7,49 @@ export function SayHello() {
     );
 }
 
-export function ConnectMetamask(props) {
-    const connect2Metamask = async (event) => {
-        event.preventDefault();
-        if (window.ethereum) {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            props.setweb3(new Web3(window.ethereum));
-        } else {
-            console.log("MetaMask version out-of-date or it wasn't installed.");
-        }
-    }
-
+export function RefetchButton(props) {
     return (
-        <form>
-            <button type="submit" onClick={connect2Metamask}>
-                Click here to connect to Metamask!
-            </button>
-        </form>
+        <div>
+            <form>
+                <button type="submit" onClick={(event) => {
+                    event.preventDefault();
+                    props.setReF(true);
+                    props.setReF(false);
+                }}>
+                    REFETCH
+                </button>
+            </form>
+        </div>
     );
 }
 
+export function AccountInfoBlock(props) {
+    return (
+        <Show
+            when={props.addr != null && props.balance != null && props.donutBalance != null}
+        >
+            <div>
+                <i>Your account address:</i><br />
+                <i>({props.addr})</i><br />
+                <i>Total <b>{props.balance}</b> SepoliaETH,</i><br />
+                <i>Total <b>{props.donutBalance}</b> donuts.</i>
+            </div>
+        </Show>
+    )
+}
+
+export function MachineInfoBlock(props) {
+    return (
+        <Show
+            when={props.info != null}
+        >
+            <div>
+                <i>
+                    Current status of the donut vending machine:<br />
+                    <b>{props.info[0]}</b> donuts left,<br />
+                    <b>{props.info[1]}</b> SepoliaETH pledged in contract.
+                </i>
+            </div>
+        </Show>
+    )
+}
