@@ -110,6 +110,7 @@ export function PurchaseDonuts(props) {
                             }}
                         />
                     </div><br />
+                    <i>0.001 SepoliaETH per donut !</i><br />
                     <i>Current gas price: {props.gasPrice} wei.</i><br /><br />
                     <button type="submit" onClick={purchase}>
                         Purchase the donuts !!
