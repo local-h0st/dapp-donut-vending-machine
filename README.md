@@ -131,3 +131,5 @@ export default defineConfig({
 
 ### 部署到Github Page
 https://cn.vitejs.dev/guide/static-deploy.html
+
+部署后发现base设置的不对，dist/index.html无法直接读取打包好的js，因此修改为`/dapp-donut-vending-machine/dist/`，然后rebuild

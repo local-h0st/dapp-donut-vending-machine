@@ -35,5 +35,5 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-  base: '/dapp-donut-vending-machine/',
+  base: '/dapp-donut-vending-machine/dist/',
 });
