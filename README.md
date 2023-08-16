@@ -1,5 +1,7 @@
 # dapp-donut-vending-machine
 
+[Home page](https://local-h0st.github.io/dapp-donut-vending-machine)
+
 合约采用solidity示例DonutVendingMachine，部署在sepolia测试网络上，写一个前端先熟悉熟悉。
 
 ## 关于vite引入web3js会报错（和前端框架的选择无关）
@@ -126,3 +128,6 @@ export default defineConfig({
 这个库真好用：https://github.com/sodatea/vite-plugin-node-stdlib-browser
 
 如果还不对的话就yarn add events应该就没问题了
+
+### 部署到Github Page
+https://cn.vitejs.dev/guide/static-deploy.html
