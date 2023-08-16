@@ -3,7 +3,6 @@
 合约采用solidity示例DonutVendingMachine，部署在sepolia测试网络上，写一个前端先熟悉熟悉。
 
 ## 关于vite引入web3js会报错（和前端框架的选择无关）
-
 这个issue提到的解决办法出自[这条](https://stackoverflow.com/questions/68975837/web3js-fails-to-import-in-vue3-composition-api-project)Stackoverflow的回答。
 
 为什么缺少web3.min.js在[这个](https://github.com/web3/web3.js/issues/2623)和[这个](https://github.com/web3/web3.js/issues/2291)Github issue中有阐述，开发者在后续版本中有意移除，目的是要你用webpack开发，更高版本更安全，但是这样很不方便因此很多人选择停留在古早的仍有的版本(https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.37/dist/web3.min.js)，beta37是移除之前最后一个版本。
@@ -65,12 +64,14 @@ initial commit就是用solidjs官方模板刚配好环境引入web3后的commit
 
 ### web3js连接Metamask
 
-[这条](https://ethereum.stackexchange.com/questions/67145/how-to-connect-web3-with-metamask)Stackoverflow的回答和[这条](https://juejin.cn/post/7099125551784280101)掘金社区帖子是我采用的，其中前者还提到了一种新的连接方式。[这份](https://blog.valist.io/how-to-connect-web3-js-to-metamask-in-2020-fee2b2edf58a)帖子提到了`window.ethereum.request({method: 'eth_requestAccounts'})`，但是我不知道它和我采用的` window.ethereum.enable()`有什么区别
+[这条](https://ethereum.stackexchange.com/questions/67145/how-to-connect-web3-with-metamask)Stackoverflow的回答和[这条](https://juejin.cn/post/7099125551784280101)掘金社区帖子是我采用的，其中前者还提到了一种新的连接方式。[这份](https://blog.valist.io/how-to-connect-web3-js-to-metamask-in-2020-fee2b2edf58a)帖子提到了`window.ethereum.request({method: 'eth_requestAccounts'})`，但是我不知道它和我采用的` window.ethereum.enable()`有什么区别。
 
-onclick事件点击完默认会刷新页面，导致connect之后因为刷新又再次disconnect，所以要event.preventDefault();
+所以是ethereum.enable()还是eth_requestAccounts？
 
-### ethereum.enable()还是eth_requestAccounts
 根据控制台信息`MetaMask: 'ethereum.enable()' is deprecated and may be removed in the future. Please use the 'eth_requestAccounts' RPC method instead.`，显然选择后者。
+
+### 关于preventDefault
+onclick事件点击完默认会刷新页面，导致connect之后因为刷新又再次disconnect，所以要event.preventDefault();
 
 ### async函数以及Promise返回值
 async函数返回一个Promise对象，async函数内部return语句返回的值，会成为then方法回调函数的参数。Promise（？应该是async函数）的return只能被resolve，不能返回普通的值，因此想要传递某个值只能通过全局变量的方式传出去。例如：
