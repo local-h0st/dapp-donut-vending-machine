@@ -3,6 +3,7 @@ import solidPlugin from 'vite-plugin-solid';
 // import devtools from 'solid-devtools/vite';
 import GlobalsPolyfills from '@esbuild-plugins/node-globals-polyfill'
 import NodeModulesPolyfills from '@esbuild-plugins/node-modules-polyfill'
+import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 
 export default defineConfig({
     optimizeDeps: {
@@ -26,6 +27,7 @@ export default defineConfig({
     */
     // devtools(),
     solidPlugin(),
+    nodePolyfills(),
   ],
   server: {
     port: 3000,

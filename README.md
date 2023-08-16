@@ -102,3 +102,25 @@ createResource(flag, async () => {
 
 ### Unrecognized value. Skipped inserting xxx
 大概问题就是合约返回的json中某些参数的数据类型jsx不能识别，使用typeof(data)即可发现。比如合约返回的数字通常是bigint类型，直接传递给component会导致无法识别。因此解决办法是：一般数字使用Number(data)转为Number类型；如果变量data的含义是ETH，且以wei为单位，可以使用Number(data)转成一般的Number类型（仍然以wei为单位），也可以使用web3.utils.fromWei(data, 'ether')转为string类型（此时以ether为单位）。
+
+### 打包部署失败
+`"EventEmitter" is not exported by "__vite-browser-external", imported by "../../../node_modules/web3-utils/lib/esm/web3_eip1193_provider.js".`
+
+vite官方文档的意思是vite不像webpack，vite不会自动polyfill一些nodejs内建模块。根据报错信息定位到这个文件，发现里面`import { EventEmitter } from 'events';`，所以也就是events这个模块的问题了。
+
+解决办法参考[这个](https://kei-kmj.hatenablog.com/entry/2023/01/23/114314)，如下：
+```
+npm add node-stdlib-browser
+npm add -D vite-plugin-node-stdlib-browser
+
+// vite.config.ts
+import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+
+export default defineConfig({
+  plugins: [nodePolyfills()]
+})
+```
+
+然后npm run build就正常了
+
+如果还不对的话就yarn add events应该就没问题了

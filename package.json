@@ -14,9 +14,12 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "solid-devtools": "^0.27.3",
     "vite": "^4.3.9",
+    "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vite-plugin-solid": "^2.7.0"
   },
   "dependencies": {
+    "events": "^3.3.0",
+    "node-stdlib-browser": "^1.2.0",
     "solid-js": "^1.7.6"
   }
 }
