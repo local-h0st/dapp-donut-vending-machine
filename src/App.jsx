@@ -1,9 +1,8 @@
 import styles from './App.module.css';
 import Web3 from 'web3';
-import { RefetchButton, AccountInfoBlock, MachineInfoBlock, PurchaseDonuts, AlertBlock } from './MyComponents';
+import { RefetchButton, AccountInfoBlock, MachineInfoBlock, PurchaseDonuts, AlertBlock, RestockBlock, WithdrawEtherBlock } from './MyComponents';
 import { createSignal, createResource, Show } from "solid-js";
 import { abi, contractAddr } from './DountContractInfo';
-
 
 function App() {
   // for alert
@@ -69,6 +68,14 @@ function App() {
     });
   });
 
+  // auto get gas price every 3 seconds
+  const [gasPrice, setGasPrice] = createSignal(null);
+  setInterval(async () => {
+    await web3.eth.getGasPrice().then((result) => {
+      setGasPrice(Number(result));
+    })
+  }, 3000);
+
   // for test when click the button
   createResource(refetchFlag, () => {
 
@@ -77,15 +84,19 @@ function App() {
   return (
     <div class={styles.App}>
       <i><h1>Donut Vending Machine</h1></i>
-      <i>Decentrialized Application Version</i><br /><br />
+      <i>Decentrialized Application Version</i><br />
+      <i>Powered by <a href="https://github.com/local-h0st/dapp-donut-vending-machine">redh3tALWAYS</a></i><br />
+      <br />
       <Show
         when={web3}
       >
-        <AlertBlock msg={alertMsg()} /><br />
+        <AlertBlock msg={alertMsg()} />
         <RefetchButton setReF={setReF} setAlert={setAlertMsg} /><br />
-        <AccountInfoBlock addr={accountAddr()} balance={accountBalance()} donutBalance={accountDonutBalance()} /><br />
-        <MachineInfoBlock info={machineInfo()} /><br />
-        <PurchaseDonuts contract={donutContract()} addr={accountAddr()} trans={web3.utils.toWei} setAlert={setAlertMsg} />
+        <AccountInfoBlock addr={accountAddr()} balance={accountBalance()} donutBalance={accountDonutBalance()} />
+        <MachineInfoBlock info={machineInfo()} />
+        <PurchaseDonuts contract={donutContract()} addr={accountAddr()} trans={web3.utils.toWei} setAlert={setAlertMsg} gasPrice={gasPrice()} /><br /><br /><br />
+        <RestockBlock contract={donutContract()} addr={accountAddr()} setAlert={setAlertMsg} /><br />
+        <WithdrawEtherBlock contract={donutContract()} addr={accountAddr()} setAlert={setAlertMsg} />
       </Show>
     </div>
   );
