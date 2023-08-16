@@ -1,6 +1,6 @@
 # dapp-donut-vending-machine
 
-[Home page](https://local-h0st.github.io/dapp-donut-vending-machine/dist)
+Try it here! => [Home page](https://local-h0st.github.io/dapp-donut-vending-machine/dist)
 
 合约采用solidity示例DonutVendingMachine，部署在sepolia测试网络上，写一个前端先熟悉熟悉。
 
