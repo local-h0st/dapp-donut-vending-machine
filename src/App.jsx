@@ -5,8 +5,10 @@ import { createSignal, createResource, Show } from "solid-js";
 import { abi, contractAddr } from './DountContractInfo';
 
 function App() {
-  // for alert
+  // for control
   const [alertMsg, setAlertMsg] = createSignal(null);
+  const [refetchFlag, setReF] = createSignal(false);
+
 
   // init web3
   var web3 = null;
@@ -35,13 +37,13 @@ function App() {
       setDonutContract(new web3.eth.Contract(abi, contractAddr));
       console.log("contract loaded:", donutContract());
       console.log("all prepared.");
-      setAlertMsg("Everything prepared, press REFECH to load data.");
+      setReF(true);
+      setReF(false);
     } else {
       console.log("web3.eth.net.isListening error.");
     }
   })();
 
-  const [refetchFlag, setReF] = createSignal(false);
 
 
   // refetch account balance
