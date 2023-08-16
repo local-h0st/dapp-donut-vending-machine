@@ -6,7 +6,7 @@ import NodeModulesPolyfills from '@esbuild-plugins/node-modules-polyfill'
 import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 
 export default defineConfig({
-    optimizeDeps: {
+  optimizeDeps: {
     esbuildOptions: {
       plugins: [
         NodeModulesPolyfills(),
@@ -35,4 +35,5 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
+  base: '/dapp-donut-vending-machine/',
 });
